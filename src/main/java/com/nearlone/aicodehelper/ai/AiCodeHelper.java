@@ -14,12 +14,21 @@ import org.springframework.stereotype.Service;
 public class AiCodeHelper {
 
     @Resource
-    private ChatModel qwenChatModel;
+    private ChatModel myQwenChatModel;
 
+    //文本类型消息
     public String chat(String message) {
         // 封装为UserMessage
         UserMessage userMessage = UserMessage.from(message);
-        ChatResponse chatResponse = qwenChatModel.chat(userMessage);
+        ChatResponse chatResponse = myQwenChatModel.chat(userMessage);
+        AiMessage aiMessage = chatResponse.aiMessage();
+        log.info("AI输出: {}", aiMessage);
+        return aiMessage.text();
+    }
+
+    // 多模态类型消息
+    public String chatWithMultiModal(UserMessage userMessage) {
+        ChatResponse chatResponse = myQwenChatModel.chat(userMessage);
         AiMessage aiMessage = chatResponse.aiMessage();
         log.info("AI输出: {}", aiMessage);
         return aiMessage.text();
